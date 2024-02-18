@@ -12,12 +12,12 @@ const s3 = new S3({
 
 // fileName => output\\rkwl8\\src\\App.jsx
 // localFilePath => A:\\Web Development\\Full Stack Projects\\Vercel Clone\\vercel\\dist\\output\\rkwl8\\src\\App.jsx
-export const uploadFile = async (fileName: string, localFilePath: string) => {
+export const uploadFile = async (id: string, fileName: string, localFilePath: string) => {
     const fileContent = fs.readFileSync(localFilePath);
     const response = await s3.upload({
         Body: fileContent,
         Bucket: "aditya-vercel-clone",
-        Key: fileName,
+        Key: `output/${id}/${fileName}`,
     }).promise();
     console.log(response); // debugging...
 }

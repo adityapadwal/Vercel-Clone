@@ -31,7 +31,7 @@ app.post("/deploy", async(req, res) => {
     files.forEach(async file => {
         // A:\\Web Development\\Full Stack Projects\\Vercel Clone\\vercel\\dist\\output\\rkwl8\\src\\App.jsx
         // output\\rkwl8\\src\\App.jsx
-        await uploadFile(file.slice(__dirname.length + 1), file);
+        await uploadFile(id, file.slice(__dirname.length + 1), file);
     });
 
     // pushing the id into the Redis queue for further processing
