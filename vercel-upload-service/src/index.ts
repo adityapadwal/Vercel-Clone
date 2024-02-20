@@ -9,6 +9,8 @@ import {uploadFile} from "./aws";
 import { createClient } from "redis";
 const publisher = createClient();
 publisher.connect();
+const subscriber = createClient();
+subscriber.connect();
 
 // creating an instance of the express application
 const app = express();
@@ -34,14 +36,27 @@ app.post("/deploy", async(req, res) => {
         await uploadFile(id, file.slice(__dirname.length + 1), file);
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
     // pushing the id into the Redis queue for further processing
     publisher.lPush("build-queue", id);
+
+    // store the current video id’s status as uploaded
+    publisher.hSet("status", id, "uploaded");
 
     // return the id to the client
     res.json({
         id: id
     });
 });
+
+app.get("/status", async (req, res) => {
+    const id = req.query.id;
+    const response = await subscriber.hGet("status", id as string);
+    res.json({
+        status: response
+    })
+})
 
 // running the express application
 app.listen(3000, () => {

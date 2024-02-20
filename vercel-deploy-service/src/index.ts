@@ -1,6 +1,8 @@
 import { createClient, commandOptions } from "redis";
 const subscriber = createClient();
 subscriber.connect();
+const publisher = createClient();
+publisher.connect();
 
 import { copyFinalDist, downloadS3Folder } from "./aws";
 import { buildProject } from "./utils";
@@ -22,6 +24,8 @@ async function main() {
         await buildProject(id);
 
         copyFinalDist(id);
+
+        publisher.hSet("status", id, "deployed");
     }
 }
 main();
