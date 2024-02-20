@@ -2,10 +2,13 @@ import { S3 } from "aws-sdk";
 import fs from "fs";
 import path from "path";
 
+// Importing dotenv for the API Keys
+require("dotenv").config();
+
 const s3 = new S3({
-    accessKeyId: "AKIAVP735EMKQDDAFYRJ",
-    secretAccessKey:"HpK5e9hLNW8y0F3+JZGRBs4o/P5Ch4lr4VV8TPL6",
-})
+    accessKeyId: process.env.S3_ACCESS_KEY, // gives error (replace with S3_ACCESS_KEY string)
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY, // gives error (replace with S3_ACCESS_KEY string)
+});
 
 // output/asdasd
 export async function downloadS3Folder(prefix: string) {
